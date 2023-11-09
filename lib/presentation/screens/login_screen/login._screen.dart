@@ -67,6 +67,17 @@ class LoginScreen extends StatelessWidget {
                   text: "Iniciar Sesion"
                 ),
                 const SizedBox(
+                  height: 30,
+                ),
+                CustomButton(
+                  onPressed: () {
+                    if(provider.login(usuarioController.text, passwordController.text)){
+                          context.pushNamed('home');
+                        }
+                  }, 
+                  text: "Iniciar Sesion"
+                ),
+                const SizedBox(
                   height: 50,
                 ),
                 const Text("No recuerdo mi contraseña", style: TextStyle(color: Colors.white, decoration: TextDecoration.underline, decorationColor: Colors.white),),

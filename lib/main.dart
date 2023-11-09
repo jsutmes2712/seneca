@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seneca/firebase_options.dart';
 import 'package:seneca/presentation/provider/provider.dart';
 import 'package:seneca/config/router/app_router.dart';
 import 'package:seneca/config/theme/app_theme.dart';
 
-void main() {
+void main() async {
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
 }
 
