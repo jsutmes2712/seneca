@@ -7,7 +7,7 @@ import 'package:seneca/config/router/app_router.dart';
 import 'package:seneca/config/theme/app_theme.dart';
 
 void main() async {
-
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

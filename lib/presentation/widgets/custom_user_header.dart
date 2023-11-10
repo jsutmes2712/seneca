@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:seneca/presentation/provider/provider.dart';
 import 'package:seneca/presentation/widgets/custom_elevated_button.dart';
+import 'package:seneca/services/firebase_service.dart';
 class CustomUserHeader extends StatelessWidget {
   const CustomUserHeader({super.key});
 
@@ -27,11 +28,13 @@ class CustomUserHeader extends StatelessWidget {
                 Row (
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(provider.user),
+                    Text(provider.user!),
                     IconButton(
                       icon: const Icon(Icons.people), 
-                      onPressed: () {
-                        context.pop();
+                      onPressed: () async {
+                        FirebaseService service = FirebaseService();
+                        await service.signOutFromGoogle();
+                        context.goNamed('login');
                       },
                     )
                   ]

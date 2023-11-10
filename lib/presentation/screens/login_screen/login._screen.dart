@@ -1,18 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:seneca/presentation/provider/provider.dart';
 import 'package:seneca/presentation/widgets/custom_button.dart';
+import 'package:seneca/services/firebase_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
     final TextEditingController usuarioController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
-    
+    bool isLoading = false;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 24, 62, 153),
       body: SingleChildScrollView(
@@ -70,12 +77,24 @@ class LoginScreen extends StatelessWidget {
                   height: 30,
                 ),
                 CustomButton(
-                  onPressed: () {
-                    if(provider.login(usuarioController.text, passwordController.text)){
-                          context.pushNamed('home');
-                        }
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    try {
+                      await provider.loginWithGoogle();
+                      context.goNamed("home");
+                    } catch(e){
+                      if(e is FirebaseAuthException){
+                        showMessage(e.message!);
+                      }
+                    }
+                    setState(() {
+                      isLoading = false;
+                    });
                   }, 
-                  text: "Iniciar Sesion"
+                  text: "Iniciar Sesion con Google"
                 ),
                 const SizedBox(
                   height: 50,
@@ -95,4 +114,25 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+
+  void showMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+
 }

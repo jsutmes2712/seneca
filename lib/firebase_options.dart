@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '994178374365',
     projectId: 'iseneca-jsm',
     storageBucket: 'iseneca-jsm.appspot.com',
+    androidClientId: '994178374365-lc183nhti8h7uo7h89ooenhqbohdfo1v.apps.googleusercontent.com',
     iosClientId: '994178374365-r4v37j3ifs6jj3vd1ccmvfrm6re950i3.apps.googleusercontent.com',
     iosBundleId: 'com.example.seneca',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '994178374365',
     projectId: 'iseneca-jsm',
     storageBucket: 'iseneca-jsm.appspot.com',
+    androidClientId: '994178374365-lc183nhti8h7uo7h89ooenhqbohdfo1v.apps.googleusercontent.com',
     iosClientId: '994178374365-l3gmsunlhc5nb3414i6ktvvk6d0eai4h.apps.googleusercontent.com',
     iosBundleId: 'com.example.seneca.RunnerTests',
   );
