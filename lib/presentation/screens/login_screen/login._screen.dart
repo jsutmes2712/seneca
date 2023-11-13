@@ -13,13 +13,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  final TextEditingController usuarioController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool passwordVisibility = true;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
     provider.getValidUsers();
-    final TextEditingController usuarioController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    bool isLoading = false;
+    
+    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 24, 62, 153),
       body: SingleChildScrollView(
@@ -49,13 +53,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   controller: passwordController,
                   style: const TextStyle(color: Colors.white),
-                  obscureText: true,
+                  obscureText: passwordVisibility,
                   decoration: InputDecoration(
                     labelText: 'Contraseña',
                     labelStyle: const TextStyle(color: Colors.white),
                     suffixIcon: IconButton(
                       onPressed:() {
-                        
+                        setState(() {
+                          passwordVisibility = !passwordVisibility;
+                        });
                       }, 
                       icon: const Icon(Icons.visibility),
                       color: Colors.white,
@@ -68,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                   onPressed: () {
                     if(provider.login(usuarioController.text, passwordController.text)){
-                      if (provider.validateUser(FirebaseAuth.instance.currentUser!.email!)) {
+                      if (provider.validateUser(passwordController.text)) {
                         context.goNamed("home");
                       }else{
                         showMessage("Login no permitido");
@@ -80,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                CustomButton(
+                !isLoading? CustomButton(
                   onPressed: () async {
                     setState(() {
                       isLoading = true;
@@ -104,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   }, 
                   text: "Iniciar Sesion con Google"
-                ),
+                ):const CircularProgressIndicator(),
                 const SizedBox(
                   height: 50,
                 ),
