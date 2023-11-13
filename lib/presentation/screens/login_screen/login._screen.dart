@@ -68,8 +68,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                   onPressed: () {
                     if(provider.login(usuarioController.text, passwordController.text)){
-                          context.pushNamed('home');
-                        }
+                      if (provider.validateUser(FirebaseAuth.instance.currentUser!.email!)) {
+                        context.goNamed("home");
+                      }else{
+                        showMessage("Login no permitido");
+                      }
+                    }
                   }, 
                   text: "Iniciar Sesion"
                 ),
