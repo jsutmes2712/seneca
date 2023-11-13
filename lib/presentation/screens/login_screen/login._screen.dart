@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:seneca/presentation/provider/provider.dart';
 import 'package:seneca/presentation/widgets/custom_button.dart';
-import 'package:seneca/services/firebase_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
+    provider.getValidUsers();
     final TextEditingController usuarioController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     bool isLoading = false;
@@ -84,7 +84,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     try {
                       await provider.loginWithGoogle();
-                      context.goNamed("home");
+                      
+                      if (provider.validateUser(FirebaseAuth.instance.currentUser!.email!)) {
+                        context.goNamed("home");
+                      }else{
+                        throw FirebaseAuthException(code: "no permitido", message: "Login no permitido");
+                      }
                     } catch(e){
                       if(e is FirebaseAuthException){
                         showMessage(e.message!);
