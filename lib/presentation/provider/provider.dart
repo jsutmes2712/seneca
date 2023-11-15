@@ -7,7 +7,7 @@ import 'package:seneca/services/firebase_service.dart';
 
 class AppProvider extends ChangeNotifier {
 
-  String? user = "";
+  String? user = "user";
   final getUsers = GetUsers();
 
   late List<Usuario> usersList;
