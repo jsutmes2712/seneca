@@ -21,9 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
-    provider.getValidUsers();
-    
-    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 24, 62, 153),
       body: SingleChildScrollView(
@@ -74,11 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                   onPressed: () {
                     if(provider.login(usuarioController.text, passwordController.text)){
-                      if (provider.validateUser(passwordController.text)) {
                         context.goNamed("home");
-                      }else{
-                        showMessage("Login no permitido");
-                      }
                     }
                   }, 
                   text: "Iniciar Sesion"
@@ -94,12 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     try {
                       await provider.loginWithGoogle();
-                      
-                      if (provider.validateUser(FirebaseAuth.instance.currentUser!.email!)) {
-                        context.goNamed("home");
-                      }else{
-                        throw FirebaseAuthException(code: "no permitido", message: "Login no permitido");
-                      }
+                      context.goNamed("home");
                     } catch(e){
                       if(e is FirebaseAuthException){
                         showMessage(e.message!);

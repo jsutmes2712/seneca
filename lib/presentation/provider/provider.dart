@@ -7,15 +7,17 @@ import 'package:seneca/services/firebase_service.dart';
 
 class AppProvider extends ChangeNotifier {
 
-  String? user = "user";
+  String? user = "";
+  String? email = "";
   final getUsers = GetUsers();
 
   late List<Usuario> usersList;
 
-  bool login( String usuario, String password){
+  bool login( String email, String password){
 
-    user = usuario;
-    return usuario != "" && usuario == password && password != "";
+    user = email;
+    this.email = email;
+    return email != "" && email == password && password != "";
   }
 
   Future<String?> loginWithGoogle() async{
@@ -25,6 +27,7 @@ class AppProvider extends ChangeNotifier {
       await service.signInwithGoogle();
       User? usuario = FirebaseAuth.instance.currentUser;
       user = usuario!.displayName;
+      email = usuario.email;
     } catch(e){
       if(e is FirebaseAuthException){
         rethrow;
@@ -33,13 +36,9 @@ class AppProvider extends ChangeNotifier {
     return null;
   }
 
-
-  Future<void> getValidUsers() async{
+  Future<bool>validateUser() async{
 
     usersList =  await getUsers.getAnswer();
-  }
-
-  bool validateUser(String email){
 
     for (var user in usersList) {
 
@@ -53,3 +52,4 @@ class AppProvider extends ChangeNotifier {
 }
 
   
+
